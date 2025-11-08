@@ -11,7 +11,7 @@ Example
 >>> from chemkit.core.units import to_meter
 >>> length = 1200
 >>> length = to_meter(length, "cm")
-12
+12.0
 """
 
 from typing import Final
