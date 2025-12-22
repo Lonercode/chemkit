@@ -1,0 +1,50 @@
+<div id="3dmolviewer_17664368907633681"  style="position: relative; width: 800px; height: 800px;">
+        <p id="3dmolwarning_17664368907633681" style="background-color:#ffcccc;color:black">3Dmol.js failed to load for some reason.  Please check your browser console for error messages.<br></p>
+        </div>
+<script>
+
+var loadScriptAsync = function(uri){
+  return new Promise((resolve, reject) => {
+    //this is to ignore the existence of requirejs amd
+    var savedexports, savedmodule;
+    if (typeof exports !== 'undefined') savedexports = exports;
+    else exports = {}
+    if (typeof module !== 'undefined') savedmodule = module;
+    else module = {}
+
+    var tag = document.createElement('script');
+    tag.src = uri;
+    tag.async = true;
+    tag.onload = () => {
+        exports = savedexports;
+        module = savedmodule;
+        resolve();
+    };
+  var firstScriptTag = document.getElementsByTagName('script')[0];
+  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+});
+};
+
+if(typeof $3Dmolpromise === 'undefined') {
+$3Dmolpromise = null;
+  $3Dmolpromise = loadScriptAsync('https://cdn.jsdelivr.net/npm/3dmol@2.5.3/build/3Dmol-min.js');
+}
+
+var viewer_17664368907633681 = null;
+var warn = document.getElementById("3dmolwarning_17664368907633681");
+if(warn) {
+    warn.parentNode.removeChild(warn);
+}
+$3Dmolpromise.then(function() {
+viewer_17664368907633681 = $3Dmol.createViewer(document.getElementById("3dmolviewer_17664368907633681"),{backgroundColor:"white"});
+viewer_17664368907633681.zoomTo();
+	viewer_17664368907633681.addModel("\n     RDKit          2D\n\n  3  2  0  0  0  0  0  0  0  0999 V2000\n    2.3010   -0.6673    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    1.1505    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0000   -0.6673    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0\n  2  3  1  0\nM  END\n","mol");
+	viewer_17664368907633681.setStyle({"stick": {}});
+	viewer_17664368907633681.addLabel("O",{"position": {"x": 2.301, "y": -0.6673, "z": 0.0}, "backgroundColor": "white", "fontColor": "black", "fontSize": 25, "showBackground": false, "fontOpacity": 1});
+	viewer_17664368907633681.addLabel("C",{"position": {"x": 1.1505, "y": 0.0, "z": 0.0}, "backgroundColor": "white", "fontColor": "black", "fontSize": 25, "showBackground": false, "fontOpacity": 1});
+	viewer_17664368907633681.addLabel("C",{"position": {"x": 0.0, "y": -0.6673, "z": 0.0}, "backgroundColor": "white", "fontColor": "black", "fontSize": 25, "showBackground": false, "fontOpacity": 1});
+	viewer_17664368907633681.setViewStyle({"style": "outline", "color": "white", "width": 0.05});
+	viewer_17664368907633681.zoomTo();
+viewer_17664368907633681.render();
+});
+</script>
