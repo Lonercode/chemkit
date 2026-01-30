@@ -72,7 +72,7 @@ def get_molecular_similarity_factor(smiles1: str, smiles2: str):
     return similarity
 
 
-# ToDo: Add all functional groups avilable on
+# ToDo: Move the functional group object to its own file for better readability
 # https://www.daylight.com/dayhtml_tutorials/languages/smarts/smarts_examples.html
 # in PR
 
@@ -100,6 +100,89 @@ def detect_functional_group(smiles: str):
         "carbamic_acid": "[NX3,NX4+][CX3](=[OX1])[OX2H,OX1-]",
         "carboxylate_ion": "[CX3](=O)[O-]",
         "hydroxyl": "[OX2H]",
+        "Carbonic Acid/Carbpnic Ester": "[CX3](=[OX1])(O)O",
+        "Carbonic Acid/Carbonic Acid-Ester": "[CX3](=[OX1])([OX2])[OX2H,OX1H0-1]",
+        "Carbonic Ester (carbonic acid diester)": "C[OX2][CX3](=[OX1])[OX2]C",
+        "Carboxylic acid": "[CX3](=O)[OX2H1]",
+        "Carboxylic acid/conjugate base": "[CX3](=O)[OX1H0-,OX2H1]",
+        "Cyanamide": "[NX3][CX2]#[NX1]",
+        "Ester": "[#6][CX3](=O)[OX2H0][#6]",
+        "Ketone": "[#6][CX3](=O)[#6]",
+        "Ether": "[OD2]([#6])[#6]",
+        "Hydrogen": "[H]",
+        "Enamine": "[NX3][CX3]=[CX3]",
+        "Glycine": "N[CX4H2][CX3](=[OX1])[O,N]",
+        "Proline": "N1[CX4H]([CH2][CH2][CH2]1)[CX3](=[OX1])[O,N]",
+        "Alanine side chain": "[CH3X4]",
+        "Arginine side chain": (
+            "[CH2X4][CH2X4][CH2X4][NHX3][CH0X3](=[NH2X3+,NHX2+0])[NH2X3]"
+        ),
+        "Aspargine side chain": "[CH2X4][CX3](=[OX1])[NX3H2]",
+        "Apartate": "[CH2X4][CX3](=[OX1])[OH0-,OH]",
+        "Cysteine side chain": "[CH2X4][SX2H,SX1H0-]",
+        "Glutamate": "[CH2X4][CH2X4][CX3](=[OX1])[OH0-,OH]",
+        "Isoleucine side chain": "[CHX4]([CH3X4])[CH2X4][CH3X4]",
+        "Leucine side chain": "[CH2X4][CHX4]([CH3X4])[CH3X4]",
+        "Lysine side chain": "[CH2X4][CH2X4][CH2X4][CH2X4][NX4+,NX3+0]",
+        "Thioamide": "[NX3][CX3]=[SX1]",
+        "Valine side chain": "[CHX4]([CH3X4])[CH3X4]",
+        "Alanine side chain": "[CH3X4]",
+        "Azide group": "[$(*-[NX2-]-[NX2+]#[NX1]),$(*-[NX2]=[NX2+]=[NX1-])]",
+        "Azide ion": "[$([NX1-]=[NX2+]=[NX1-]),$([NX1]#[NX2+]-[NX1-2])]",
+        "Hydrazine": "[NX3][NX3]",
+        "Hydrazone": "[NX3][NX2]=[*]",
+        "Iminium": "[NX3+]=[CX3]",
+        "Unsubstituted dicarboximide": "[CX3](=[OX1])[NX3H][CX3](=[OX1])",
+        "Substituted dicarboxmide": "[CX3](=[OX1])[NX3H0]([#6])[CX3](=[OX1])",
+        "Dicarboxdiimide": (
+            "[CX3](=[OX1])[NX3H0]([NX3H0]([CX3](=[OX1]))[CX3](=[OX1]))[CX3](=[OX1])"
+        ),
+        "Nitrate group": "[$([NX3](=[OX1])(=[OX1])O),$([NX3+]([OX1-])(=[OX1])O)]",
+        "Nitrate Anion": "[$([OX1]=[NX3](=[OX1])[OX1-]),$([OX1]=[NX3+]([OX1-])[OX1-])]",
+        "Nitrile": "[NX1]#[CX2]",
+        "Isonitrile": "[CX1-]#[NX2+]",
+        "Nitroso group": "[NX2]=[OX1]",
+        "N-Oxide": "[$([#7+][OX1-]),$([#7v5]=[OX1]);!$([#7](~[O])~[O]);!$([#7]=[#7])]",
+        "Hydroxyl in Carboxylic acid": "[OX2H][CX3]=[OX1]",
+        "Enol": "[OX2H][#6X3]=[#6]",
+        "Phenol": "[OX2H][cX3]:[c]",
+        "Enol or Phenol": "[OX2H][$(C=C),$(cc)]",
+        "Hydroxyl_acidic": "[$([OH]-*=[!#6])]",
+        "Peroxide groups": "[OX2,OX1-][OX2,OX1-]",
+        "Phosphoric acid groups": (
+            "[$(P(=[OX1])([$([OX2H]),$([OX1-]),$([OX2]P)])([$([OX2H]),$([OX1-]),$([OX2]P)])[$([OX2H]),$([OX1-]),$([OX2]P)]),$([P+]([OX1-])([$([OX2H]),$([OX1-]),$([OX2]P)])([$([OX2H]),$([OX1-]),$([OX2]P)])[$([OX2H]),$([OX1-]),$([OX2]P)])]"  # noqa E501
+        ),
+        "Phosphoric ester groups": (
+            "[$(P(=[OX1])([OX2][#6])([$([OX2H]),$([OX1-]),$([OX2][#6])])[$([OX2H]),$([OX1-]),$([OX2][#6]),$([OX2]P)]),$([P+]([OX1-])([OX2][#6])([$([OX2H]),$([OX1-]),$([OX2][#6])])[$([OX2H]),$([OX1-]),$([OX2][#6]),$([OX2]P)])]"  # noqa E501
+        ),
+        "Carbo-Thiocarboxylate": "[S-][CX3](=S)[#6]",
+        "Carbo-Thioester": "S([#6])[CX3](=O)[#6]",
+        "Thio/sulfide/disulfide sulfur": "[SX2]",
+        "Thioamide": "[NX3][CX3]=[SX1]",
+        "Sulfide": "[#16X2H0]",
+        "Sulfinate": "[$([#16X3](=[OX1])[OX2H0]),$([#16X3+]([OX1-])[OX2H0])]",
+        "Sulfinic acid": (
+            "[$([#16X3](=[OX1])[OX2H,OX1H0-]),$([#16X3+]([OX1-])[OX2H,OX1H0-])]"
+        ),
+        "Carbo-azosulfone": "[SX4](C)(C)(=O)=N",
+        "Sulfonamide": (
+            "[$([SX4](=[OX1])(=[OX1])([!O])[NX3]),$([SX4+2]([OX1-])([OX1-])([!O])[NX3])]"  # noqa E501
+        ),
+        "Sulfenic acid": "[#16X2][OX2H,OX1H0-]",
+        "Sulfenate": "[#16X2][OX2H0]",
+        "Amino acid (generic)": "[NX3,NX4+][CX4H]([*])[CX3](=[OX1])[O,N]",
+        "Primary or secondary amine": "[NX3;H2,H1;!$(NC=O)]",
+        "Primary amine": "[NX3;H2;!$(NC=[!#6]);!$(NC#[!#6])][#6]",
+        "Threonine side chain": "[CHX4]([CH3X4])[OX2H]",
+        "Tryptophan side chain": (
+            "[CH2X4][cX3]1[cX3H][nX3H][cX3]2[cX3H][cX3H][cX3H][cX3H][cX3]12"
+        ),
+        "Tyrosine side chain": (
+            "[CH2X4][cX3]1[cX3H][cX3H][cX3]([OHX2,OH0X1-])[cX3H][cX3H]1"
+        ),
+        "Methionine side chain": "[CH2X4][CH2X4][SX2][CH3X4]",
+        "Phenylalanine side chain": "[CH2X4][cX3]1[cX3H][cX3H][cX3H][cX3H][cX3H]1",
+        "Serine side chain": "[CH2X4][OX2H]",
     }
 
     mol = Chem.MolFromSmiles(smiles)
