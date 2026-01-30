@@ -13,6 +13,7 @@ Example
 """
 
 import webbrowser
+from collections import defaultdict
 
 import py3Dmol
 from rdkit import Chem
@@ -112,6 +113,43 @@ def detect_functional_group(smiles: str):
         if matches:
             detected[name] = matches
     return detected
+
+
+def element_count(smiles: str):
+    """Get element count for each element in molecule"""
+    mol = Chem.MolFromSmiles(smiles)
+    if mol is None:
+        raise ValueError("Invalid SMILES")
+    counts = defaultdict(int)
+
+    for atom in mol.GetAtoms():
+        symbol = atom.GetSymbol()
+        counts[symbol] += 1
+        counts["H"] += atom.GetTotalNumHs()
+
+    return dict(counts)
+
+
+def detect_degree_of_unsaturation(smiles: str):
+    """Calculate degree of unsaturation"""
+    counts = element_count(smiles)
+
+    C = counts.get("C", 0)
+    H = counts.get("H", 0)
+    N = counts.get("N", 0)
+
+    halogens = ["F", "Cl", "Br", "I"]
+
+    X = sum(counts.get(x, 0) for x in halogens)
+
+    du = (2 * C + 2 + N - H - X) / 2
+
+    # A check since a negative degree of unsaturation would be nonsensical
+
+    if du < 0:
+        raise ValueError(" The degree of unsaturation is a negative value")
+
+    return du
 
 
 __all__ = ["view_molecule", "get_molecular_formula", "get_molecular_similarity_factor"]
